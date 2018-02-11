@@ -1,4 +1,5 @@
-﻿using SFML.Audio;
+﻿using Base_Defence.Entities;
+using SFML.Audio;
 using SFML.Graphics;
 using SFML.Window;
 using System;
@@ -19,6 +20,8 @@ namespace Base_Defence
 
         public Music BackgroundMusic = new Music(Helpers.GetResource("Assets.Sounds.background.wav"));
 
+        public List<Barricade> Barricades = new List<Barricade>();
+
         public Environment()
         { 
 
@@ -34,6 +37,14 @@ namespace Base_Defence
 
         protected void Init()
         {
+
+            Barricades.Add(new Barricade(0, 550, BarricadeType.Flat));
+            Barricades.Add(new Barricade(100, 550, BarricadeType.Flat));
+            Barricades.Add(new Barricade(400, 550, BarricadeType.Flat));
+            Barricades.Add(new Barricade(500, 550, BarricadeType.Flat));
+            Barricades.Add(new Barricade(300, 550, BarricadeType.Curved));
+
+
             Background = new Sprite(BackgroundTexture);
 
             // Background Music Control

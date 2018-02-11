@@ -9,6 +9,7 @@ namespace Base_Defence
 {
     static class GameContext
     {
+        public static List<Drawable> DrawQueue = new List<Drawable>();
         public static RenderWindow Window = new RenderWindow(new VideoMode(600, 600), "Base Defence");
 
         public static Environment Environment = new Environment();
@@ -20,8 +21,6 @@ namespace Base_Defence
         public static bool GameOver = false;
 
         public static double DeltaTime;
-
-        public static List<Drawable> DrawQueue = new List<Drawable>();
 
         public static void OnClose(object sender, EventArgs e)
         {

@@ -2,6 +2,7 @@
 using SFML.Window;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Timers;
 
 namespace Base_Defence.Entities
@@ -11,7 +12,7 @@ namespace Base_Defence.Entities
         public ZombieStage AnimationStage = ZombieStage.Walking;
         int SubAnimationStage = 0;
 
-        public float Speed = 0.3f;
+        public float Speed = 0.03f;
         static Texture ZombieTexture = new Texture(Helpers.GetResource("Assets.Textures.zombie.png"));
 
         static Dictionary<KeyValuePair<ZombieStage, int>, IntRect> AnimationRects = new Dictionary<KeyValuePair<ZombieStage, int>, IntRect>()
@@ -46,9 +47,12 @@ namespace Base_Defence.Entities
 
         public Zombie(int X, int Y)
         {
-            Shape = new Sprite();
-            Shape.Position = new Vector2f(X, Y);
-            Shape.Origin = new Vector2f(64, 64);
+            Shape = new Sprite()
+            {
+                Position = new Vector2f(X, Y),
+                Origin = new Vector2f(64, 64)
+            };
+
             GameContext.DrawQueue.Add(this);
             GameContext.ZombieAnimator.AttactEvent(DoAnimationCycle);
             Shape.Texture = ZombieTexture;
@@ -64,7 +68,16 @@ namespace Base_Defence.Entities
 
         public override void Draw(RenderTarget target, RenderStates states)
         {
-            Shape.Position = new Vector2f(Shape.Position.X, Shape.Position.Y + (float)GameContext.DeltaTime * 0.03f);
+            var ZombiePosition = Shape.GetGlobalBounds();
+            ZombiePosition.Top -= 35;
+            if (GameContext.Environment.Barricades.Any(x => x.Shape.GetGlobalBounds().Intersects(ZombiePosition)))
+            {
+                AnimationStage = ZombieStage.Attacking;
+            }else
+            {
+                Shape.Position = new Vector2f(Shape.Position.X, Shape.Position.Y + (float)GameContext.DeltaTime * Speed);
+            }
+            
 
             base.Draw(target, states);
         }

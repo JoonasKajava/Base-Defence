@@ -74,6 +74,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animator.cs" />
+    <Compile Include="Entities\Barricade.cs" />
+    <Compile Include="Entities\Bullet.cs" />
+    <Compile Include="Entities\Turret.cs" />
     <Compile Include="Entities\Zombie.cs" />
     <Compile Include="Entities\GameEntity.cs" />
     <Compile Include="Environment.cs" />
@@ -88,6 +91,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Assets\Textures\BarricadeCurved.png" />
+    <EmbeddedResource Include="Assets\Textures\BarricadeFlat.png" />
+    <EmbeddedResource Include="Assets\Sounds\cannon.wav" />
+    <EmbeddedResource Include="Assets\Textures\bullet.png" />
+    <EmbeddedResource Include="Assets\Textures\turret.png" />
     <EmbeddedResource Include="Assets\Sounds\background.wav" />
     <EmbeddedResource Include="Assets\Textures\DefaultBackground.png" />
     <EmbeddedResource Include="Assets\Textures\zombie.png" />

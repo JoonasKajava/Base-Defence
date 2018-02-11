@@ -21,6 +21,8 @@ namespace Base_Defence
             Stopwatch deltatimer = new Stopwatch();
             deltatimer.Start();
 
+            Turret MainTurret = new Turret(300, 500);
+
             while(GameContext.Window.IsOpen())
             {
                 GameContext.DeltaTime = deltatimer.ElapsedMilliseconds;
