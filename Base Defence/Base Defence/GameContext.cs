@@ -13,7 +13,13 @@ namespace Base_Defence
 
         public static Environment Environment = new Environment();
 
+        public static Animator ZombieAnimator = new Animator(100);
+
+        public static Spawner ZombieSpawner = new Spawner(1000);
+
         public static bool GameOver = false;
+
+        public static double DeltaTime;
 
         public static List<Drawable> DrawQueue = new List<Drawable>();
 

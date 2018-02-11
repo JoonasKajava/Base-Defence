@@ -9,14 +9,12 @@ namespace Base_Defence.Entities
 {
     abstract class GameEntity : Drawable
     {
-        public Shape Shape { get; set; }
-
-        public Texture Texture { get; set; }
+        public Sprite Shape { get; set; }
 
         public int HealthPoints { get; set; }
         public bool Alive => HealthPoints > 0;
 
-        public void Draw(RenderTarget target, RenderStates states)
+        public virtual void Draw(RenderTarget target, RenderStates states)
         {
             target.Draw(Shape);
         }

@@ -1,13 +1,18 @@
 ﻿using SFML.Graphics;
 using SFML.Window;
+using System;
 using System.Collections.Generic;
+using System.Timers;
 
 namespace Base_Defence.Entities
 {
     class Zombie : GameEntity
     {
-        public ZombieStage AnimationStage { get; set; }
-        int SubAnimationStage { get; set; }
+        public ZombieStage AnimationStage = ZombieStage.Walking;
+        int SubAnimationStage = 0;
+
+        public float Speed = 0.3f;
+        static Texture ZombieTexture = new Texture(Helpers.GetResource("Assets.Textures.zombie.png"));
 
         static Dictionary<KeyValuePair<ZombieStage, int>, IntRect> AnimationRects = new Dictionary<KeyValuePair<ZombieStage, int>, IntRect>()
         {
@@ -39,17 +44,29 @@ namespace Base_Defence.Entities
             {new KeyValuePair<ZombieStage, int>(ZombieStage.Dead, 7), new IntRect(4480, 896, 128, 128)},
         };
 
-        public Zombie(int width, int height)
+        public Zombie(int X, int Y)
         {
-            Shape = new RectangleShape(new Vector2f(width, height));
-            Texture = new Texture(Helpers.GetResource("Assets.Textures.zombie.png"));
+            Shape = new Sprite();
+            Shape.Position = new Vector2f(X, Y);
+            Shape.Origin = new Vector2f(64, 64);
+            GameContext.DrawQueue.Add(this);
+            GameContext.ZombieAnimator.AttactEvent(DoAnimationCycle);
+            Shape.Texture = ZombieTexture;
+            Shape.TextureRect = AnimationRects[new KeyValuePair<ZombieStage, int>(AnimationStage, SubAnimationStage)];
         }
 
-
-
-        public void AnimationCycle()
+        public void DoAnimationCycle(object sender, ElapsedEventArgs e)
         {
+            Shape.TextureRect = AnimationRects[new KeyValuePair<ZombieStage, int>(AnimationStage, SubAnimationStage)];
+            SubAnimationStage++;
+            if (SubAnimationStage > 7) SubAnimationStage = 0;
+        }
 
+        public override void Draw(RenderTarget target, RenderStates states)
+        {
+            Shape.Position = new Vector2f(Shape.Position.X, Shape.Position.Y + (float)GameContext.DeltaTime * 0.03f);
+
+            base.Draw(target, states);
         }
 
     }
