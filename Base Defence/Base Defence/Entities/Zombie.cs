@@ -11,7 +11,6 @@ namespace Base_Defence.Entities
     {
         public ZombieStage AnimationStage = ZombieStage.Walking;
         int SubAnimationStage = 0;
-
         public float Speed = 0.03f;
         static Texture ZombieTexture = new Texture(Helpers.GetResource("Assets.Textures.zombie.png"));
 
@@ -47,6 +46,7 @@ namespace Base_Defence.Entities
 
         public Zombie(int X, int Y)
         {
+            HealthPoints = 100;
             Shape = new Sprite()
             {
                 Position = new Vector2f(X, Y),
@@ -61,23 +61,27 @@ namespace Base_Defence.Entities
 
         public void DoAnimationCycle(object sender, ElapsedEventArgs e)
         {
+            if (!Alive) AnimationStage = ZombieStage.Dead;
             Shape.TextureRect = AnimationRects[new KeyValuePair<ZombieStage, int>(AnimationStage, SubAnimationStage)];
-            SubAnimationStage++;
-            if (SubAnimationStage > 7) SubAnimationStage = 0;
+            if( SubAnimationStage < 7) SubAnimationStage++;
+            if (SubAnimationStage >= 7 && Alive) SubAnimationStage = 0;
         }
 
         public override void Draw(RenderTarget target, RenderStates states)
         {
-            var ZombiePosition = Shape.GetGlobalBounds();
-            ZombiePosition.Top -= 35;
-            if (GameContext.Environment.Barricades.Any(x => x.Shape.GetGlobalBounds().Intersects(ZombiePosition)))
+            if (Alive)
             {
-                AnimationStage = ZombieStage.Attacking;
-            }else
-            {
-                Shape.Position = new Vector2f(Shape.Position.X, Shape.Position.Y + (float)GameContext.DeltaTime * Speed);
+                var ZombiePosition = Shape.GetGlobalBounds();
+                ZombiePosition.Top -= 35;
+                if (GameContext.Environment.Barricades.Any(x => x.Shape.GetGlobalBounds().Intersects(ZombiePosition)))
+                {
+                    AnimationStage = ZombieStage.Attacking;
+                }
+                else
+                {
+                    Shape.Position = new Vector2f(Shape.Position.X, Shape.Position.Y + (float)GameContext.DeltaTime * Speed);
+                }
             }
-            
 
             base.Draw(target, states);
         }
