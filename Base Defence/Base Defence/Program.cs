@@ -11,6 +11,24 @@ namespace Base_Defence
         static void Main(string[] args)
         {
 
+            GameContext.RegisterEvents();
+
+
+
+            while(GameContext.Window.IsOpen())
+            {
+                GameContext.Window.DispatchEvents();
+                GameContext.Window.Clear();
+
+                GameContext.Window.Draw(GameContext.Environment);
+
+
+                GameContext.DrawQueue.ForEach(x => GameContext.Window.Draw(x));
+
+                GameContext.Window.Display();
+            }
+
+
         }
     }
 }
