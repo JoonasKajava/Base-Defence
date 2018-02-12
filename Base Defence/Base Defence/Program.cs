@@ -21,20 +21,24 @@ namespace Base_Defence
             Stopwatch deltatimer = new Stopwatch();
             deltatimer.Start();
 
-            while(GameContext.Window.IsOpen())
+            while (GameContext.Window.IsOpen())
             {
                 GameContext.Window.DispatchEvents();
                 GameContext.DeltaTime = deltatimer.ElapsedMilliseconds;
                 deltatimer.Restart();
 
-                
+
                 GameContext.Window.Clear();
+                if (!GameContext.GameOver)
+                {
 
-                GameContext.Window.Draw(GameContext.Environment);
-                
-                GameContext.DrawQueue.OrderBy(x => (x as GameEntity)?.DrawPriority ?? 5).ToList()?.ForEach(x => GameContext.Window.Draw(x));
+                    GameContext.Window.Draw(GameContext.Environment);
 
+                    GameContext.DrawQueue.OrderBy(x => (x as GameEntity)?.DrawPriority ?? 5).ToList()?.ForEach(x => GameContext.Window.Draw(x));
+                }
                 GameContext.Window.Draw(GameContext.Environment.Score);
+                GameContext.Window.Draw(GameContext.Environment.Health);
+                //GameContext.Window.Draw(GameContext.Environment.Health);
 
                 GameContext.Window.Display();
             }

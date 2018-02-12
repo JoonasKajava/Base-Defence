@@ -28,6 +28,10 @@ namespace Base_Defence
 
 
         public Text Score = new Text("Score: " + GameContext.Score, new Font(Helpers.GetResource("Assets.Fonts.Oswald.ttf")));
+        public Text Health = new Text("Health: " + GameContext.Health, new Font(Helpers.GetResource("Assets.Fonts.Oswald.ttf")))
+        {
+            Position = new Vector2f(0, 30)
+        };
 
         public Environment()
         {
@@ -87,10 +91,9 @@ namespace Base_Defence
 
         }
 
-        public override void OnEveryTick()
+        public void OnScoreChange()
         {
             Score.DisplayedString = "Score: " + GameContext.Score;
-
             if (GameContext.Score >= 350 && Turrets.Count < 2)
             {
                 Turrets.Add(new Turret(250, 500));
@@ -98,6 +101,16 @@ namespace Base_Defence
             if (GameContext.Score >= 700 && Turrets.Count < 3)
             {
                 Turrets.Add(new Turret(350, 500));
+            }
+        }
+
+        public override void OnEveryTick()
+        {
+            Health.DisplayedString = "Health: " + GameContext.Health;
+            if (GameContext.Health <= 0)
+            {
+                GameContext.GameOver = true;
+                GameContext.ZombieSpawner.Timer.Stop();
             }
         }
 

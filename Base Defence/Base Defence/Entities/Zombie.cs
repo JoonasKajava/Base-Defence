@@ -102,6 +102,12 @@ namespace Base_Defence.Entities
                     AnimationStage = ZombieStage.Walking;
 
                 }
+                if(ZombiePosition.Top > GameContext.Window.Size.Y)
+                {
+                    GameContext.Health -= 10;
+                    this.HealthPoints = -1;
+                    GameContext.DrawQueue.RemoveAll(x => x == this);
+                }
             }
         }
 

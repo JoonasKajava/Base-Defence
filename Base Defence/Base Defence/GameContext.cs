@@ -10,6 +10,9 @@ namespace Base_Defence
 {
     static class GameContext
     {
+        public static int Score = 0;
+        public static int Health = 100;
+
         public static List<Drawable> DrawQueue = new List<Drawable>();
         public static RenderWindow Window = new RenderWindow(new VideoMode(600, 600), "Base Defence");
 
@@ -20,8 +23,6 @@ namespace Base_Defence
         public static Spawner ZombieSpawner = new Spawner(1000);
 
         public static bool GameOver = false;
-
-        public static int Score = 0;
 
         public static double DeltaTime;
 

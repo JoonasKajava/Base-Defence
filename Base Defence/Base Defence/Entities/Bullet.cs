@@ -28,6 +28,7 @@ namespace Base_Defence.Entities
 
         public override void OnEveryTick()
         {
+            
             var Zombie = GameContext.DrawQueue?.ToList()?.OfType<Zombie>()?.ToList()?.Find(x => x.Shape.GetGlobalBounds().Intersects(Shape.GetGlobalBounds()) && x.Alive);
 
             if (Zombie != null)
@@ -38,6 +39,7 @@ namespace Base_Defence.Entities
                 GameContext.ZombieSpawner.Timer.Interval -= 10 / GameContext.Environment.Turrets.Count;
                 GameContext.DrawQueue.RemoveAll(x => x == this);
                 GameLogicTimer.Stop();
+                GameContext.Environment.OnScoreChange();
             }
 
 
