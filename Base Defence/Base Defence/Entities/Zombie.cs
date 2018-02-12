@@ -55,7 +55,7 @@ namespace Base_Defence.Entities
 
         public Zombie(int X, int Y) : base()
         {
-
+            DrawPriority = 4;
             HealthPoints = 100;
             Shape = new Sprite()
             {

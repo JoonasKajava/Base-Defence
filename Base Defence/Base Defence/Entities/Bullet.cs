@@ -13,6 +13,7 @@ namespace Base_Defence.Entities
 
         public Bullet(float X, float Y, float Angle) : base()
         {
+            DrawPriority = 5;
             GameLogicTimer.Interval = 5;
             Shape = new Sprite()
             {
@@ -32,14 +33,17 @@ namespace Base_Defence.Entities
             if (Zombie != null)
             {
                 Zombie.HealthPoints -= 50;
-                GameContext.DrawQueue.Remove(this);
+                GameContext.Score += 10;
+                if(GameContext.ZombieSpawner.Timer.Interval > 10)
+                GameContext.ZombieSpawner.Timer.Interval -= 10 / GameContext.Environment.Turrets.Count;
+                GameContext.DrawQueue.RemoveAll(x => x == this);
                 GameLogicTimer.Stop();
             }
 
 
             if ((Shape.Position.X > GameContext.Window.Size.X || Shape.Position.Y > GameContext.Window.Size.Y) || (Shape.Position.X < 0 || Shape.Position.Y < 0))
             {
-                GameContext.DrawQueue.Remove(this);
+                GameContext.DrawQueue.RemoveAll(x => x == this);
                 GameLogicTimer.Stop();
             }
         }

@@ -19,6 +19,7 @@ namespace Base_Defence.Entities
 
         public Turret(int X, int Y)
         {
+            DrawPriority = 5;
             ShotLimiter.Start();
             Shape = new Sprite()
             {

@@ -1,5 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.Window;
+using System.Linq;
 
 namespace Base_Defence.Entities
 {
@@ -10,6 +11,7 @@ namespace Base_Defence.Entities
 
         public Barricade(int X, int Y, BarricadeType Type, int? Health = null) : base()
         {
+            DrawPriority = 2;
             HealthPoints = Health ?? 100;
 
             Shape = new Sprite()
@@ -27,6 +29,7 @@ namespace Base_Defence.Entities
         {
             if (!Alive)
             {
+
                 GameContext.DrawQueue.Remove(this);
                 GameContext.Environment.Barricades.Remove(this);
             }

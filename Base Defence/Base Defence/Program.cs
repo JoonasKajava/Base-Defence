@@ -21,20 +21,20 @@ namespace Base_Defence
             Stopwatch deltatimer = new Stopwatch();
             deltatimer.Start();
 
-            Turret MainTurret = new Turret(300, 500);
-
             while(GameContext.Window.IsOpen())
             {
+                GameContext.Window.DispatchEvents();
                 GameContext.DeltaTime = deltatimer.ElapsedMilliseconds;
                 deltatimer.Restart();
 
-                GameContext.Window.DispatchEvents();
+                
                 GameContext.Window.Clear();
 
                 GameContext.Window.Draw(GameContext.Environment);
                 
+                GameContext.DrawQueue.OrderBy(x => (x as GameEntity)?.DrawPriority ?? 5).ToList()?.ForEach(x => GameContext.Window.Draw(x));
 
-                GameContext.DrawQueue.ToList()?.ForEach(x => GameContext.Window.Draw(x));
+                GameContext.Window.Draw(GameContext.Environment.Score);
 
                 GameContext.Window.Display();
             }

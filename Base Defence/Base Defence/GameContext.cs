@@ -3,6 +3,7 @@
 using SFML.Graphics;
 using SFML.Window;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Base_Defence
@@ -19,6 +20,8 @@ namespace Base_Defence
         public static Spawner ZombieSpawner = new Spawner(1000);
 
         public static bool GameOver = false;
+
+        public static int Score = 0;
 
         public static double DeltaTime;
 

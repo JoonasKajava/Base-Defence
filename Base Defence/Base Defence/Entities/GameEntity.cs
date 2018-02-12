@@ -12,6 +12,8 @@ namespace Base_Defence.Entities
     {
         public Sprite Shape { get; set; }
 
+        public int DrawPriority { get; set; }
+
         public int HealthPoints { get; set; }
         public bool Alive => HealthPoints > 0;
 

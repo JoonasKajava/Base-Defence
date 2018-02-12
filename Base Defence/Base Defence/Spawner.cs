@@ -10,7 +10,7 @@ namespace Base_Defence
 {
     class Spawner
     {
-        Timer Timer;
+        public Timer Timer;
         static Random rnd = new Random();
 
         public Spawner(int Interval)

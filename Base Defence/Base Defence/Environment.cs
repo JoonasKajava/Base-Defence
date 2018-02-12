@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Base_Defence
 {
-    class Environment : Drawable
+    class Environment : GameEntity
     {
         Texture BackgroundTexture;
 
@@ -22,14 +22,21 @@ namespace Base_Defence
 
         public List<Barricade> Barricades = new List<Barricade>();
 
+        public List<Turret> Turrets = new List<Turret>() {
+             new Turret(300, 500)
+        };
+
+
+        public Text Score = new Text("Score: " + GameContext.Score, new Font(Helpers.GetResource("Assets.Fonts.Oswald.ttf")));
+
         public Environment()
-        { 
+        {
 
             BackgroundTexture = new Texture(Helpers.GetResource("Assets.Textures.DefaultBackground.png"));
             Init();
-            
+
         }
-        public Environment(Texture _background)
+        public Environment(Texture _background) : base()
         {
             BackgroundTexture = _background;
             Init();
@@ -73,13 +80,28 @@ namespace Base_Defence
 
             Background = new Sprite(BackgroundTexture);
 
+
             // Background Music Control
             BackgroundMusic.Loop = true;
             BackgroundMusic.Play();
 
         }
 
-        public void Draw(RenderTarget target, RenderStates states)
+        public override void OnEveryTick()
+        {
+            Score.DisplayedString = "Score: " + GameContext.Score;
+
+            if (GameContext.Score >= 350 && Turrets.Count < 2)
+            {
+                Turrets.Add(new Turret(250, 500));
+            }
+            if (GameContext.Score >= 700 && Turrets.Count < 3)
+            {
+                Turrets.Add(new Turret(350, 500));
+            }
+        }
+
+        public override void Draw(RenderTarget target, RenderStates states)
         {
             target.Draw(Background);
         }
