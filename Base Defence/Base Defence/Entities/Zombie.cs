@@ -2,6 +2,7 @@
 using SFML.Window;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 
@@ -11,7 +12,15 @@ namespace Base_Defence.Entities
     {
         public ZombieStage AnimationStage = ZombieStage.Walking;
         int SubAnimationStage = 0;
+
+
         public float Speed = 0.03f;
+        public int Damage = 10;
+        public int AttackSpeed = 1000;
+
+        public Stopwatch AttackLimiter = new Stopwatch();
+
+
         static Texture ZombieTexture = new Texture(Helpers.GetResource("Assets.Textures.zombie.png"));
 
         static Dictionary<KeyValuePair<ZombieStage, int>, IntRect> AnimationRects = new Dictionary<KeyValuePair<ZombieStage, int>, IntRect>()
@@ -46,12 +55,14 @@ namespace Base_Defence.Entities
 
         public Zombie(int X, int Y)
         {
+
             HealthPoints = 100;
             Shape = new Sprite()
             {
                 Position = new Vector2f(X, Y),
                 Origin = new Vector2f(64, 64)
             };
+            AttackLimiter.Start();
 
             GameContext.DrawQueue.Add(this);
             GameContext.ZombieAnimator.AttactEvent(DoAnimationCycle);
@@ -72,13 +83,23 @@ namespace Base_Defence.Entities
             if (Alive)
             {
                 var ZombiePosition = Shape.GetGlobalBounds();
-                ZombiePosition.Top -= 35;
-                if (GameContext.Environment.Barricades.Any(x => x.Shape.GetGlobalBounds().Intersects(ZombiePosition)))
+                ZombiePosition.Top -= 3;
+
+                Barricade collidedBarricade = GameContext.Environment.Barricades.Find(x => x.Shape.GetGlobalBounds().Intersects(ZombiePosition));
+
+                if (collidedBarricade != null)
                 {
                     AnimationStage = ZombieStage.Attacking;
+                    if(AttackLimiter.ElapsedMilliseconds >= AttackSpeed)
+                    {
+                        collidedBarricade.HealthPoints -= Damage;
+                        AttackLimiter.Restart();
+                    }
+                    
                 }
                 else
                 {
+                    AnimationStage = ZombieStage.Walking;
                     Shape.Position = new Vector2f(Shape.Position.X, Shape.Position.Y + (float)GameContext.DeltaTime * Speed);
                 }
             }
