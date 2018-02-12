@@ -8,7 +8,7 @@ namespace Base_Defence.Entities
         static Texture BarricateFlat = new Texture(Helpers.GetResource("Assets.Textures.BarricadeFlat.png"));
         static Texture BarricateCurved = new Texture(Helpers.GetResource("Assets.Textures.BarricadeCurved.png"));
 
-        public Barricade(int X, int Y, BarricadeType Type, int? Health = null)
+        public Barricade(int X, int Y, BarricadeType Type, int? Health = null) : base()
         {
             HealthPoints = Health ?? 100;
 
@@ -23,14 +23,13 @@ namespace Base_Defence.Entities
             GameContext.DrawQueue.Add(this);
         }
 
-        public override void Draw(RenderTarget target, RenderStates states)
+        public override void OnEveryTick()
         {
             if (!Alive)
             {
                 GameContext.DrawQueue.Remove(this);
                 GameContext.Environment.Barricades.Remove(this);
             }
-            base.Draw(target, states);
         }
 
     }

@@ -53,7 +53,7 @@ namespace Base_Defence.Entities
             {new KeyValuePair<ZombieStage, int>(ZombieStage.Dead, 7), new IntRect(4480, 896, 128, 128)},
         };
 
-        public Zombie(int X, int Y)
+        public Zombie(int X, int Y) : base()
         {
 
             HealthPoints = 100;
@@ -78,7 +78,7 @@ namespace Base_Defence.Entities
             if (SubAnimationStage >= 7 && Alive) SubAnimationStage = 0;
         }
 
-        public override void Draw(RenderTarget target, RenderStates states)
+        public override void OnEveryTick()
         {
             if (Alive)
             {
@@ -90,20 +90,25 @@ namespace Base_Defence.Entities
                 if (collidedBarricade != null)
                 {
                     AnimationStage = ZombieStage.Attacking;
-                    if(AttackLimiter.ElapsedMilliseconds >= AttackSpeed)
+                    if (AttackLimiter.ElapsedMilliseconds >= AttackSpeed)
                     {
                         collidedBarricade.HealthPoints -= Damage;
                         AttackLimiter.Restart();
                     }
-                    
+
                 }
                 else
                 {
                     AnimationStage = ZombieStage.Walking;
-                    Shape.Position = new Vector2f(Shape.Position.X, Shape.Position.Y + (float)GameContext.DeltaTime * Speed);
+
                 }
             }
+        }
 
+        public override void Draw(RenderTarget target, RenderStates states)
+        {
+            if(AnimationStage == ZombieStage.Walking)
+            Shape.Position = new Vector2f(Shape.Position.X, Shape.Position.Y + (float)GameContext.DeltaTime * Speed);
             base.Draw(target, states);
         }
 
