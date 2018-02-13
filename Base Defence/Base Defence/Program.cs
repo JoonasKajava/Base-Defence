@@ -34,10 +34,13 @@ namespace Base_Defence
 
                     GameContext.Window.Draw(GameContext.Environment);
 
-                    GameContext.DrawQueue.OrderBy(x => (x as GameEntity)?.DrawPriority ?? 5).ToList()?.ForEach(x => GameContext.Window.Draw(x));
+                    GameContext.DrawQueue?.OrderBy(x => (x as GameEntity)?.DrawPriority ?? 5)?.ToList()?.ForEach(x => GameContext.Window.Draw(x));
+                }else
+                {
+                    GameContext.Window.Draw(GameContext.Environment.GameOverText);
                 }
-                GameContext.Window.Draw(GameContext.Environment.Score);
-                GameContext.Window.Draw(GameContext.Environment.Health);
+                GameContext.Window.Draw(Environment.Score);
+                GameContext.Window.Draw(Environment.Health);
                 //GameContext.Window.Draw(GameContext.Environment.Health);
 
                 GameContext.Window.Display();

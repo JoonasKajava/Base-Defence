@@ -36,10 +36,10 @@ namespace Base_Defence.Entities
                 Zombie.HealthPoints -= 50;
                 GameContext.Score += 10;
                 if(GameContext.ZombieSpawner.Timer.Interval > 10)
-                GameContext.ZombieSpawner.Timer.Interval -= 10 / GameContext.Environment.Turrets.Count;
+                GameContext.ZombieSpawner.Timer.Interval -= 10 / Environment.Turrets.Count;
                 GameContext.DrawQueue.RemoveAll(x => x == this);
                 GameLogicTimer.Stop();
-                GameContext.Environment.OnScoreChange();
+                Environment.OnScoreChange();
             }
 
 

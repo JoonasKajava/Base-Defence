@@ -19,6 +19,7 @@ namespace Base_Defence.Entities
 
         public Turret(int X, int Y)
         {
+            HealthPoints = 1;
             DrawPriority = 5;
             ShotLimiter.Start();
             Shape = new Sprite()
@@ -37,12 +38,13 @@ namespace Base_Defence.Entities
 
         public void Rotate(object sender, MouseMoveEventArgs e)
         {
+            if(Alive)
             Shape.Rotation = (float)(Math.Atan2(e.Y - Shape.Position.Y, e.X - Shape.Position.X) * 180 / 3.14159265359 + 90);
         }
 
         public void Shoot(object sender, MouseButtonEventArgs e)
         {
-            if(ShotLimiter.ElapsedMilliseconds > TimeBetweenShots)
+            if(ShotLimiter.ElapsedMilliseconds > TimeBetweenShots && Alive)
             {
                 new Bullet(Shape.Position.X, Shape.Position.Y, Shape.Rotation);
                 ShootingSound.Play();

@@ -22,15 +22,20 @@ namespace Base_Defence
 
         public List<Barricade> Barricades = new List<Barricade>();
 
-        public List<Turret> Turrets = new List<Turret>() {
+        public static List<Turret> Turrets = new List<Turret>() {
              new Turret(300, 500)
         };
 
 
-        public Text Score = new Text("Score: " + GameContext.Score, new Font(Helpers.GetResource("Assets.Fonts.Oswald.ttf")));
-        public Text Health = new Text("Health: " + GameContext.Health, new Font(Helpers.GetResource("Assets.Fonts.Oswald.ttf")))
+        public static Text Score = new Text("Score: " + GameContext.Score, new Font(Helpers.GetResource("Assets.Fonts.Oswald.ttf")));
+        public static Text Health = new Text("Health: " + GameContext.Health, new Font(Helpers.GetResource("Assets.Fonts.Oswald.ttf")))
         {
             Position = new Vector2f(0, 30)
+        };
+
+        public Text GameOverText = new Text("Game Over \nScore: ", new Font(Helpers.GetResource("Assets.Fonts.Oswald.ttf"))) {
+            CharacterSize = 72,
+            Position = new Vector2f(300, 300)
         };
 
         public Environment()
@@ -84,6 +89,7 @@ namespace Base_Defence
 
             Background = new Sprite(BackgroundTexture);
 
+            GameOverText.Origin = new Vector2f(GameOverText.GetGlobalBounds().Width / 2, GameOverText.GetGlobalBounds().Height / 2);
 
             // Background Music Control
             BackgroundMusic.Loop = true;
@@ -91,9 +97,13 @@ namespace Base_Defence
 
         }
 
-        public void OnScoreChange()
+        public static void OnScoreChange()
         {
-            Score.DisplayedString = "Score: " + GameContext.Score;
+            lock(Score)
+            {
+                Score.DisplayedString = "Score: " + GameContext.Score;
+            }
+            
             if (GameContext.Score >= 350 && Turrets.Count < 2)
             {
                 Turrets.Add(new Turret(250, 500));
@@ -106,11 +116,18 @@ namespace Base_Defence
 
         public override void OnEveryTick()
         {
-            Health.DisplayedString = "Health: " + GameContext.Health;
+            lock(Health)
+            {
+                Health.DisplayedString = "Health: " + GameContext.Health;
+            }
+            
             if (GameContext.Health <= 0)
             {
+                Turrets.ForEach(x => x.HealthPoints = -1);
                 GameContext.GameOver = true;
+                GameOverText.DisplayedString += GameContext.Score.ToString();
                 GameContext.ZombieSpawner.Timer.Stop();
+                GameLogicTimer.Stop();
             }
         }
 
